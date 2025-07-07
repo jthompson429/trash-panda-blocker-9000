@@ -1,1 +1,13 @@
+[Unit]
+Description=Trash Panda Blocker 9000 Startup Service
+After=network.target
 
+[Service]
+Type=simple
+ExecStart=/home/pi/start-trash-panda.sh
+Restart=always
+User=pi
+WorkingDirectory=/home/pi
+
+[Install]
+WantedBy=multi-user.target
