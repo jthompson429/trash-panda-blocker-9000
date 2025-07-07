@@ -1,0 +1,6 @@
+[Unit]
+Description=Run Trash Panda Blocker 9000 status check
+
+[Service]
+Type=oneshot
+ExecStart=/home/pi/scripts/status-check.sh
