@@ -1,15 +1,17 @@
-# scripts/motion-detect.py
+#!/usr/bin/env python3
 
 import cv2
 import time
 import pigpio
+from datetime import datetime
 
-# === Servo Setup ===
-SERVO_GPIO = 18  # Adjust if using different pin
-SERVO_MIN = 500  # microseconds
-SERVO_MAX = 2500  # microseconds
-COOLDOWN_SECONDS = 60  # Cooldown between detections
+# === Config ===
+SERVO_GPIO = 18
+SERVO_MIN = 500
+SERVO_MAX = 2500
+COOLDOWN_SECONDS = 60  # Production-level cooldown between servo triggers
 
+# === Initialize pigpio ===
 print("🔧 Connecting to PiGPIO daemon...")
 pi = pigpio.pi()
 if not pi.connected:
@@ -19,7 +21,7 @@ if not pi.connected:
 print("🔧 Initializing servo...")
 pi.set_servo_pulsewidth(SERVO_GPIO, 0)
 
-# === Camera Setup ===
+# === Initialize camera ===
 print("📷 Initializing camera...")
 gst_str = (
     "libcamerasrc ! "
@@ -27,23 +29,15 @@ gst_str = (
     "videoconvert ! "
     "appsink"
 )
-
 cap = cv2.VideoCapture(gst_str, cv2.CAP_GSTREAMER)
-if not cap.isOpened():
-    print("❌ Failed to open camera.")
-    pi.stop()
-    exit()
+print("Camera opened:", cap.isOpened())
 
 ret, frame1 = cap.read()
-ret2, frame2 = cap.read()
-if not ret or not ret2:
-    print("❌ Failed to read initial frames.")
-    cap.release()
-    pi.stop()
-    exit()
+ret, frame2 = cap.read()
 
+# === Motion Detection Loop ===
 print("🎯 Motion detection running...")
-last_detection_time = 0
+last_trigger = 0
 
 try:
     while True:
@@ -54,20 +48,22 @@ try:
         dilated = cv2.dilate(thresh, None, iterations=3)
         contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        now = time.time()
-        if contours and now - last_detection_time > COOLDOWN_SECONDS:
-            print("👀 Motion detected!")
+        if contours and (time.time() - last_trigger) > COOLDOWN_SECONDS:
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            print(f"👀 Motion detected! [{timestamp}]")
+
             pi.set_servo_pulsewidth(SERVO_GPIO, SERVO_MAX)
             time.sleep(0.5)
             pi.set_servo_pulsewidth(SERVO_GPIO, SERVO_MIN)
             time.sleep(0.5)
             pi.set_servo_pulsewidth(SERVO_GPIO, 0)
-            last_detection_time = now
+
+            last_trigger = time.time()
 
         frame1 = frame2
         ret, frame2 = cap.read()
         if not ret:
-            print("❌ Failed to read next frame.")
+            print("❌ Failed to read next frame")
             break
 
         time.sleep(0.1)
