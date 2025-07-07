@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Trash Panda Blocker 9000 status check every hour
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=1h
+Unit=status-check.service
+
+[Install]
+WantedBy=timers.target
