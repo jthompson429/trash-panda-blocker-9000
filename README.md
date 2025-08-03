@@ -1,4 +1,5 @@
 # 🦝 Trash Panda Blocker 9000
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A Raspberry Pi–powered, motion-triggered AI deterrent system designed to keep raccoons out of your cat food. Features real-time object classification, servo-based food protection, live MJPEG video streaming, weatherproof hardware, and a growing suite of smart detection tools.
 
