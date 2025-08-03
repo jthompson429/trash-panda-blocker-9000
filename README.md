@@ -79,4 +79,24 @@ Once deployed and running, you can view the real-time stream at:
 
 ---
 
+## ⚖️ License & Usage
+
+This project is released under the **[Insert License Name Here]**, with the following ethical use guidance:
+
+- ✅ **Permitted**: Humane, non-commercial use to support animal welfare, feeding station management, research, or personal learning.
+- ❌ **Not Permitted**: Use for profit, animal harm, exclusionary surveillance, or systems designed to restrict resources to living beings in need.
+
+If you'd like to use this project or build on it for other applications, please be mindful of the original purpose—and credit the creator wherever possible.
+
+---
+
+## 🌍 Archived & Authenticated
+
+The contents of this project are archived in public repositories to ensure provenance, transparency, and to protect against unethical repurposing. This version reflects the original intent of the creator and is timestamped accordingly.
+
+---
+
+## 🤝 Contribute or Contact
+
+If you're interested in contributing to this project or adapting it for another humane use case, feel free to fork it—or reach out with questions or feedback.
 _Last updated: 2025-08-03_
